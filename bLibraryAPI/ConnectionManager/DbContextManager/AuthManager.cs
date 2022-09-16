@@ -88,7 +88,10 @@ namespace bLibraryAPI.ConnectionManager.DbContextManager
                 GetPasswordHash(model.Password));
 
             if (result.Succeeded)
+            {
+                Logout();
                 return 200;
+            }
             else
                 return 400;
         }
