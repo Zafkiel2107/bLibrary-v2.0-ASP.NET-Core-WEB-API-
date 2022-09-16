@@ -1,0 +1,131 @@
+﻿@using System.Configuration
+@using bLibrary.API
+@using bLibraryAPI.Models
+@model Book
+
+@{
+    ViewData["Title"] = $"Информация о книге {@Model.Name}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var review = (ViewBag.Review as Review) ?? null;
+}
+
+<h1>Информация о книге @Model.Name</h1>
+
+<div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RecommendationsNum)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RecommendationsNum)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Part)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Part)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Pages)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Pages)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Language)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Language)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        @*TODO : уйти от хардкода к сервисам*@
+        <dd class = "col-sm-10">
+            <b><a href="@Url.Content("/Files/EBooks/" + Model.BookLink)">Читать онлайн</a></b>
+        </dd>
+        <dd class = "col-sm-10">
+            <b><a download="@Model.Name" href="@Url.Content("/Files/EBooks/" + Model.BookLink)">Скачать в PDF</a></b>
+        </dd>
+    </dl>
+</div>
+@if(User.Identity.IsAuthenticated)
+{
+    if(review != null)
+    {
+        <div>
+            <dl>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Reviews.FirstOrDefault(x => x.Id == review.Id))
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Reviews.FirstOrDefault(x => x.Id == review.Id))
+                </dd>
+                <dd class = "col-sm-10">
+                    @Html.ActionLink("Редактировать отзыв", "Review", "GetEditReview", new { id = review.Id })
+                </dd>
+                <dd class = "col-sm-10">
+                    @Html.ActionLink("Удалить отзыв", "Review", "DeleteReview", new { id = review.Id })
+                </dd>
+            </dl>
+        </div>
+    }
+    else
+    {
+        <div>
+            <span>
+                @Html.ActionLink("Оставить отзыв", "Review", "GetCreateReview")
+            </span>
+        </div>
+    }
+}
+else
+{
+    <div>
+        <span>
+            Для того, чтобы оставить отзыв на книгу, необходимо зарегистрироваться!
+        </span>
+    </div>
+}
+@if(User.Identity.IsAuthenticated)
+{
+    <div>
+        <dl class="row">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Reviews)
+            </dt>
+            @foreach(var item in Model.Reviews)
+            {
+                <dd class = "col-sm-10">
+                    @Html.Display(item.UserReview)
+                </dd>  
+            }
+        </dl>
+    </div>
+}
+else
+{
+    <div>
+        <span>
+            Для того, чтобы ознакомиться с отзывами на книгу, необходимо зарегистрироваться!
+        </span>
+    </div>
+}
+<div>
+    @Html.ActionLink("Назад к списку книг", "GetBooks", "Book")
+</div>

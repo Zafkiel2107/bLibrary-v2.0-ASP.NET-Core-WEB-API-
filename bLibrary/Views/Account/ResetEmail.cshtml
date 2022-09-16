@@ -1,0 +1,29 @@
+﻿@using bLibraryAPI.Models.Identity
+@model ResetEmailModel
+
+@{
+    ViewData["Title"] = "Смена почты";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Смена почты</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("ResetEmail", "Account", FormMethod.Post))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.NewEmail)
+                @Html.EditorFor(model => model.NewEmail, new { type = "email" })
+                @Html.ValidationMessageFor(model => model.NewEmail)
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сменить почту" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Вернуться на начальную страницу", "Main", "Home")
+</div>

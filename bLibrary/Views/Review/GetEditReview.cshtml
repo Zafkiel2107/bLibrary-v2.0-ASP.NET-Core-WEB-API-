@@ -1,0 +1,48 @@
+﻿@using bLibraryAPI.Models
+@model Review
+
+@{
+    ViewData["Title"] = $"Редактировать отзыв на книгу {Model.Book.Name}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Редактировать отзыв на книгу @Model.Book.Name</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("EditReview", "Review", FormMethod.Post))
+        {
+            @Html.HiddenFor(model => model.Book.Id)
+            @Html.HiddenFor(model => model.User.Id)
+            <div class="form-group">
+                @Html.LabelFor(model => model.Status)
+                @Html.DropDownList("status", Html.GetEnumSelectList(typeof(Status)))
+                @Html.ValidationMessageFor(model => model.Status)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserReview)
+                @Html.TextAreaFor(model => model.UserReview)
+                @Html.ValidationMessageFor(model => model.UserReview)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsRecommended)
+                @Html.RadioButtonFor(x => x.IsRecommended, true)
+                <span>Рекомендую</span> <br />
+                @Html.RadioButtonFor(x => x.IsRecommended, false)
+                <span>Не рекомендую</span> <br />
+                @Html.ValidationMessageFor(model => model.IsRecommended)
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Изменить" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Вернуться к книге", "GetBook", "Book", new { id = Model.Book.Id })
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,55 @@
+﻿@using bLibraryAPI.Models.Identity
+@model User
+
+@{
+    ViewData["Title"] = "Настройки пользователя";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Настройки пользователя</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("EditUserSettings", "Settings", FormMethod.Post))
+        {
+            @Html.HiddenFor(model => model.Id)
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserName)
+                @Html.EditorFor(model => model.UserName)
+                @Html.ValidationMessageFor(model => model.UserName)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Age)
+                @Html.EditorFor(model => model.Age)
+                @Html.ValidationMessageFor(model => model.Age)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.PhoneNumber)
+                @Html.TextAreaFor(model => model.PhoneNumber)
+                @Html.ValidationMessageFor(model => model.PhoneNumber)
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Изменить" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+    <div class="col-md-4">
+        @Html.ActionLink("Сменить почту", "ResetEmail", "Account", new { currentEmail = Model.Email })
+    </div>
+    <div class="col-md-4">
+        @Html.AjaxActionLink("Подтведить почту", "ConfirmEmail", "Account", 
+        new { confirmEmailModel = new ConfirmEmailModel { CurrentEmail = Model.Email } }, 
+        new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "emailConfirmation" }))
+        <div class="text-info" id="emailConfirmation" style="display:none;">
+            <span>На вашу электронную почту был направлен email с подтверждением</span>
+        </div>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Вернуться на главную", "Main", "Home")
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

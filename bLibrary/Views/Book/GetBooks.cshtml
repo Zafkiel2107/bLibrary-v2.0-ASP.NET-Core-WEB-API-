@@ -1,0 +1,38 @@
+﻿@using System.Configuration
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using bLibraryAPI.Models
+@model IPagedList<Book>
+
+@{
+    ViewData["Title"] = "Cписок лучших книг";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Cписок лучших книг</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            @*<th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @*TODO : уйти от хардкода к сервисам*@
+                <input type="image" onclick="location.href ='@Url.Action("GetBook", "Book", new { id = item.Id })'; return false;" 
+                src="@Url.Content("/Files/Covers/" + item.CoverLink)" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div class="jumbotron">
+    Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("GetBooks", "Book", new { ViewBag.action, page }))
+</div>

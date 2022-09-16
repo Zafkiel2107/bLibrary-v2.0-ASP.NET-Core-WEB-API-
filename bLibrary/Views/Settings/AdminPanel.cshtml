@@ -1,0 +1,61 @@
+﻿@using bLibrary.Controllers
+@model AdminSettingsModel
+
+@{
+    ViewData["Title"] = "Панель администратора";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Панель администратора</h1>
+
+<h4>Пользователи</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.Select(x => x.UserName))
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Users) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "UserSettings", "Settings", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<h4>Книги</h4>
+<div>
+    @Html.ActionLink("Создать книгу", "GetCreateBook", "Book")
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Books.Select(x => x.Name))
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Books) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "GetEditBook", "Book", new { id = item.Id })
+            </td>
+            <td>
+                @Html.ActionLink("Удалить", "GetEditBook", "Book", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
